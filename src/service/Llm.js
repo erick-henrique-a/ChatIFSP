@@ -7,7 +7,7 @@ console.log(await getArticle(input))
 
 async function getArticle(input) {
     const supabaseUrl = 'https://wzpxaghsqtkwyunzanti.supabase.co'
-    const supabaseKey = process.env.SUPA_KEY;
+    const supabaseKey = process.env.REACT_APP_SUPA_KEY;
     const supabase = createClient(supabaseUrl, supabaseKey)
 
     let emb = "http://localhost:11434/api/embeddings";
@@ -38,7 +38,7 @@ async function getArticle(input) {
     `;
 
 
-    let gemini = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + "";
+    let gemini = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=" + process.env.REACT_APP_GEMINI_KEY;;
 
 
     let body = {
@@ -62,6 +62,6 @@ async function getArticle(input) {
     let v2 = await f2.json()
     // console.log(JSON.stringify(v2))
     let text = v2.candidates[0].content.parts[0].text
-    // console.log(text)
+    console.log(text)
     return text;
 }
