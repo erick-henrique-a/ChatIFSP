@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import getArticle from './service/Llm';
 
 
 const Body = styled.div`
@@ -80,6 +81,20 @@ const ListItem = styled.li`
 `;
 
 function App() {
+  const [userInput, setUserInput] = useState(''); // Guarda o estado do input
+  const [articleResponse, setArticleResponse] = useState(''); // Mantém a informação do artigo (resposta)
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Pra não mandar vazio pelo que eu entendi, ou padrao ou algo semelhante
+
+    try {
+      const response = await getArticle(userInput);
+      setArticleResponse(response); // Update article response state
+    } catch (error) {
+      console.error("Erro ao encontrar o artigo:", error);
+      // Handle errors appropriately (e.g., display an error message)
+    }
+  };
   return (
     <Body>
       <Aside>
@@ -95,11 +110,16 @@ function App() {
       <Main>
         <Heading>Escreva sobre o artigo que deseja procurar</Heading>
         <ResponseContainer>
-          {/* respostas de artigos */}
+          {articleResponse} {/* Exibe resposta */}
         </ResponseContainer>
 
-        <Form>
-          <Input type="text" placeholder="Escreva sua mensagem aqui..." />
+        <Form onSubmit={handleSubmit}>
+          <Input 
+            type="text" 
+            placeholder="Escreva sua mensagem aqui..." 
+            value={userInput} 
+            onChange={(e) => setUserInput(e.target.value)} // atualiza o estado do input
+          />
           <Button type="submit">Enviar</Button>
         </Form>
       </Main>

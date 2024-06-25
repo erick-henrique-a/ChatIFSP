@@ -1,11 +1,8 @@
 import {createClient} from '@supabase/supabase-js'
 
 
-let input = "Gostaria de encontrar um artigo cientifico sobre desenvolvimento de aplicativos móveis"
-
-console.log(await getArticle(input))
-
 async function getArticle(input) {
+    console.log("Rodando")
     const supabaseUrl = 'https://wzpxaghsqtkwyunzanti.supabase.co'
     const supabaseKey = process.env.REACT_APP_SUPA_KEY;
     const supabase = createClient(supabaseUrl, supabaseKey)
@@ -62,6 +59,6 @@ async function getArticle(input) {
     let v2 = await f2.json()
     // console.log(JSON.stringify(v2))
     let text = v2.candidates[0].content.parts[0].text
-    console.log(text)
     return text;
 }
+export default getArticle
