@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import getArticle from './service/Llm';
 import IFSPLogo from './images/IFSPLogoNoBg.png'
+import { marked } from 'marked';
 
 const Body = styled.div`
   background-color: #EEEEEE; 
@@ -38,7 +39,7 @@ const ResponseContainer = styled.div`
   border-radius: 0.5rem;     
   padding: 1rem;            
 `;
-const ChatBubbleAI = styled.p`
+const ChatBubbleAI = styled.div`
 
   word-wrap: break-word;
   margin-bottom: 12px;
@@ -153,6 +154,11 @@ function App() {
   const [articleResponse, setArticleResponse] = useState('');
   const [messages, setMessages] = useState([]); // Array to store messages
 
+  const renderHtml = (html) => {
+    return { __html: html };
+  }
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     if (!userInput.trim()) return; // Don't submit if input is empty
@@ -186,7 +192,7 @@ function App() {
             message.sender === 'user' ? (
               <ChatBubbleUser key={index}>{message.text}</ChatBubbleUser>
             ) : (
-              <ChatBubbleAI key={index}>{message.text}</ChatBubbleAI>
+              <ChatBubbleAI key={index} dangerouslySetInnerHTML={renderHtml(marked(message.text))}></ChatBubbleAI>
             )
           ))}
         </ResponseContainer>
