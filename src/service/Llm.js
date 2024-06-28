@@ -21,17 +21,17 @@ async function getArticle(input) {
 
     const { data: documents } = await supabase.rpc('match_documents', {
         query_embedding: embedding, // Pass the embedding you want to compare
-        match_threshold: 0, // Choose an appropriate threshold for your data
+        match_threshold: 0.6, // Choose an appropriate threshold for your data
         match_count: 10, // Choose the number of matches
     })
 
-
-
-
+    console.log(documents)
+    let resumo = documents.length > 0 ? documents[0].resumo : "Não foi encontrado nenhum artigo com base no seu input. Tente novamente com outra pergunta. Não recomende outros repositório de artigos cientificos, apenas o do Instituto Federal de São Paulo.";
+    let link = documents.length > 0 ? documents[0].link : "Não foi encontrado nenhum artigo com base no seu input. Tente novamente com outra pergunta. Não recomende outros repositório de artigos cientificos, apenas o do Instituto Federal de São Paulo.";
     let prompt = `Você trabalha em um banco de dados de artigos cientificos do Instituto Federal de São Paulo. Um usuário está perguntando qual o melhor artigo para ele, de acordo com o PROMPT enviado. Utilizando o RESUMO como contexto do artigo mais similar ao PROMPT, explique brevemente para o usuário sobre este artigo e passe o LINK para o usuário receber mais informações. Seja cauteloso e sempre reforce que este é um artigo cientifico, que não foi gerado por você. 
     PROMPT:'${input}' 
-    RESUMO:'${documents[0].resumo}' 
-    LINK:'${documents[0].link}'
+    RESUMO:'${resumo}' 
+    LINK:'${link}'
     `;
 
 
